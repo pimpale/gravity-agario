@@ -139,14 +139,14 @@ public class GravityAgario extends JPanel implements MouseListener, MouseMotionL
         if (ParticleId.get(i) == "player") q = i;
       }
 
-      if (Math.random() > 0.95) {
+      if (Math.random() > 0.15) {
         addObject(
             "dust",
             ((Math.random() * 1400)) - 350,
             ((Math.random() * 1400)) - 350,
             ((Math.random() - 0.5) * 0.01),
             ((Math.random() - 0.5) * 0.01),
-            1);
+            Math.random()*5);
       }
 
       if (Math.random() > 0.98) {
@@ -176,6 +176,17 @@ public class GravityAgario extends JPanel implements MouseListener, MouseMotionL
             (double) ((Math.random() - 0.5) * 0.5),
             Math.random() * 100);
       }
+
+     if (Math.random() > 0.99987) {
+        addObject(
+            "asteroid",
+            (double) ((Math.random() * 1400)) - 350,
+            (double) ((Math.random() * 1400)) - 350,
+            (double) ((Math.random() - 0.5) * 0.5),
+            (double) ((Math.random() - 0.5) * 0.5),
+            Math.random() * 600);
+      }
+
     }
   }
 
@@ -189,7 +200,7 @@ public class GravityAgario extends JPanel implements MouseListener, MouseMotionL
     ParticleYvel.set(
         launcherID,
         (ParticleYvel.get(launcherID)
-            - velocity * mass * Math.sin(angle) / ParticleMa.get(launcherID)));
+            - velocity * mass * Math.sin(angle + Math.PI) / ParticleMa.get(launcherID)));
     SpawnDustParticle(launcherID, angle, velocity, mass, 0);
   }
 
@@ -197,7 +208,7 @@ public class GravityAgario extends JPanel implements MouseListener, MouseMotionL
       int launcherID, double angle, double velocity, double mass, double radialvelocity) {
     double ParticleRadius = radius(ParticleMa.get(launcherID))*2;
 
-    if (Math.random() > 0.05) {
+    if (Math.random() > 0.005) {
       ParticleId.add("dust");
     } else {
       mass += 1;
@@ -227,8 +238,8 @@ public class GravityAgario extends JPanel implements MouseListener, MouseMotionL
         if (mouseDown == true && mousex < 700 && mousey < 700) {
           if (Math.sqrt(
                   Math.pow(ParticleXvel.get(i) / ParticleMa.get(i), 2)
-                      + Math.pow(ParticleXvel.get(i) / ParticleMa.get(i), 2))
-              > 1) {
+                      + Math.pow(ParticleYvel.get(i) / ParticleMa.get(i), 2))
+              > 0.1) {
             ParticleXvel.set(i, (double) (ParticleXvel.get(i) / 1.1));
             ParticleYvel.set(i, (double) (ParticleYvel.get(i) / 1.1));
           }
@@ -423,7 +434,7 @@ public class GravityAgario extends JPanel implements MouseListener, MouseMotionL
                 double ItoAParticledistance = Math.hypot(IParticleXqwerty - AParticleXqwerty, IParticleYqwerty - AParticleYqwerty);
                 if (Math.pow(ItoAParticledistance, -2) * ParticleMa.get(a) * ParticleMa.get(i)
                     > 0.0005) {
-                  if (ItoAParticledistance > 1 + 0.7 * (AParticleradius + IParticleradius)) {
+                  if (ItoAParticledistance > 0.7 * (AParticleradius + IParticleradius)) {
                     if (a < ParticleId.size() && i < ParticleId.size()) {
                       double ParticledegreesfromAtoI =
                           Math.atan2(
